@@ -1,0 +1,193 @@
+version: 1
+send_anonymous_usage_stats: true
+project_id: target-kafka
+default_environment: test
+environments:
+- name: test
+plugins:
+  extractors:
+  - name: tap-csv
+    variant: meltanolabs
+    pip_url: git+https://github.com/MeltanoLabs/tap-csv.git
+    config: 
+      files:
+        - path: ./data.csv
+          entity: data
+          keys:
+            - symbol
+            - date
+            - open
+            - high
+            - low
+            - close
+            - adjclose
+            - volume
+            - EMA12
+            - EMA26
+            - RSI
+            - MACD
+          encoding: utf-8
+  loaders:
+  - name: target-kafka
+    namespace: target_kafka
+    pip_url: -e .
+    executable: target-kafka
+    capabilities:
+    - about
+    - stream-maps
+    - record-flattening
+    settings:
+    - name: bootstrap_servers
+      kind: string
+      description: host[:port] string (or list of comma separated host[:port] strings)
+        that the consumer should contact to bootstrap initial cluster metadata.
+    - name: client_id
+      kind: string
+      description: 'a name for this client. This string is passed in each request
+        to servers and can be used to identify specific server-side log entries that
+        correspond to this client. Default: ‘kafka-python-producer-#’ (appended with
+        a unique number per instance)'
+    - name: acks
+      kind: string
+      description: 'Used to convert user-supplied keys to bytes If not None, called
+        as f(key), should return bytes. Default: None.'
+    - name: compression_type
+      kind: string
+      description: 'If not None, called as f(key), should return bytes. Default: None.'
+    - name: retry
+      kind: string
+      description: 'If not None, called as f(key), should return bytes. Default: None.'
+    - name: batch_size
+      kind: integer
+      description: 'The producer will attempt to batch records together into fewer
+        requests whenever multiple records are being sent to the same partition. Default:
+        16384.'
+    - name: linger_ms
+      kind: integer
+      description: 'The producer groups together any records that arrive in between
+        request transmissions into a single batched request. Default: 0.'
+    - name: buffer_memory
+      kind: integer
+      description: 'The total bytes of memory the producer can use to buffer records
+        waiting to be sent to the server. Default: 33554432.'
+    - name: connection_max_idle_ms
+      kind: integer
+      description: 'Close idle connections after the number of milliseconds specified
+        by this config. Default: 540000.'
+    - name: max_block_ms
+      kind: integer
+      description: 'The configuration controls how long the producer will wait for
+        the response of a request. Default: 60000.'
+    - name: max_request_size
+      kind: integer
+      description: 'The maximum size of a request in bytes. Default: 1048576.'
+    - name: metadata_max_age_ms
+      kind: integer
+      description: 'The period of time in milliseconds after which we force a refresh
+        of metadata even if we haven’t seen any partition leadership changes to proactively
+        discover any new brokers or partitions. Default: 300000.'
+    - name: retry_backoff_ms
+      kind: integer
+      description: 'The amount of time in milliseconds to wait before attempting to
+        retry a failed produce request. Default: 100.'
+    - name: request_timeout_ms
+      kind: integer
+      description: 'The configuration controls the maximum amount of time the client
+        will wait for the response of a request. Default: 30000.'
+    - name: receive_buffer_bytes
+      kind: integer
+      description: 'The size of the TCP receive buffer (SO_RCVBUF) to use when reading
+        data. Default: None.'
+    - name: socket_options
+      kind: array
+      description: 'List of (int, int) tuples to use as arguments to setsockopt. Default:
+        None.'
+    - name: send_buffer_bytes
+      kind: integer
+      description: 'The size of the TCP send buffer (SO_SNDBUF) to use when sending
+        data. Default: None.'
+    - name: reconnect_backoff_ms
+      kind: integer
+      description: 'The amount of time in milliseconds to wait before attempting to
+        retry a failed connection. Default: 50.'
+    - name: reconnect_backoff_max_ms
+      kind: integer
+      description: 'The maximum amount of time in milliseconds to wait when reconnecting
+        to a broker that has repeatedly failed to connect. Default: 1000.'
+    - name: max_in_flight_requests_per_connection
+      kind: integer
+      description: 'The maximum number of unacknowledged requests the client will
+        send on a single connection before blocking. Default: 5.'
+    - name: security_protocol
+      kind: string
+      description: 'Protocol used to communicate with brokers. Default: ‘PLAINTEXT’.'
+    - name: ssl_context
+      kind: string
+      description: 'A SSL context to use in requests. Default: None.'
+    - name: ssl_cafile
+      kind: string
+      description: 'The path to a file of concatenated CA certificates in PEM format.
+        Default: None.'
+    - name: ssl_certfile
+      kind: string
+      description: 'The path to a file containing the client certificate in PEM format.
+        Default: None.'
+    - name: ssl_keyfile
+      kind: string
+      description: 'The path to a file containing the client private key in PEM format.
+        Default: None.'
+    - name: ssl_password
+      kind: string
+      description: 'The password for the client’s private key. Default: None.'
+    - name: ssl_crlfile
+      kind: string
+      description: 'The path to a file containing certificate revocation lists. Default:
+        None.'
+    - name: ssl_ciphers
+      kind: string
+      description: 'The list of encryption suites allowed for SSL connections. Default:
+        None.'
+    - name: api_version
+      kind: string
+      description: 'Kafka broker version. Default: None.'
+    - name: api_version_auto_timeout_ms
+      kind: integer
+      description: 'The maximum amount of time the client will wait for the response
+        of a request. Default: 2000.'
+    - name: metrics_reporters
+      kind: array
+      description: 'A list of classes to use as metrics reporters. Default: None.'
+    - name: metrics_num_samples
+      kind: integer
+      description: 'The number of samples maintained to compute metrics. Default:
+        2.'
+    - name: metrics_sample_window_ms
+      kind: integer
+      description: 'The maximum age of samples maintained to compute metrics. Default:
+        30000.'
+    - name: selector
+      kind: string
+      description: 'The selector to use for the producer. Default: None.'
+    - name: sasl_mechanism
+      kind: string
+      description: 'SASL mechanism to use for authentication. Default: None.'
+    - name: sasl_plain_username
+      kind: string
+      description: 'SASL username for use with the PLAIN mechanism. Default: None.'
+    - name: sasl_plain_password
+      kind: string
+      description: 'Password for sasl plain authentication. Default: None.'
+    - name: sasl_kerberos_service_name
+      kind: string
+      description: 'Service name to include in GSSAPI sasl mechanism handshake. Default:
+        None.'
+    - name: sasl_kerberos_domain_name
+      kind: string
+      description: 'Kerberos domain name to use in GSSAPI sasl mechanism handshake.
+        Default: None.'
+    - name: sasl_oauth_token_provider
+      kind: string
+      description: 'Provider for OAuthBearer token. Default: None.'
+    config:
+      bootstrap_servers: localhost:19092
+      

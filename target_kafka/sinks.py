@@ -217,18 +217,38 @@ class kafkaSink(BatchSink):
         self._producer = KafkaProducer(
             **producer_config
         )
-    
-    def process_batch(self, batch) -> None:
-        
-        if isinstance(batch, List):
-            for record in batch:
-                value = json.dumps(record).encode('utf-8')
-                future = self._producer.send(self.stream_name, value=value)
-        elif isinstance(batch, dict):
-            records = batch.get("records", [])
-            for record in records:
-                value = json.dumps(record).encode('utf-8')
-                future = self._producer.send(self.stream_name, value=value)
 
+    def start_batch(self, context: dict) -> None:
+        """Start a batch.
+
+        Developers may optionally add additional markers to the `context` dict,
+        which is unique to this batch.
+
+        Args:
+            context: Stream partition or context dictionary.
+        """
+        # Sample:
+        # ------
+        # batch_key = context["batch_id"]
+        # context["file_path"] = f"{batch_key}.csv"
+        print("Starting batch")
+        print(f"Context: {context}")
+            
+    def process_batch(self, context: dict) -> None:
+        
+        records = context.get("records", [])
+        for record in records:
+            value = json.dumps(record).encode('utf-8')
+            future = self._producer.send(self.stream_name, value=value)
+            # future.add_callback(self.on_success)
+            # future.add_errback(self.on_error)
+        self._producer.flush()
+
+    # def on_success(self, record_metadata):
+    #     print(record_metadata)
+        
+    # def on_error(self, exception):
+    #     print(exception)
+        
     def close(self):
         self._producer.close()

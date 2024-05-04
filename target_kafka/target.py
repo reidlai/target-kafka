@@ -262,10 +262,6 @@ class TargetKafka(Target):
     ).to_dict()
 
     default_sink_class = kafkaSink
-    
-    @classproperty
-    def capabilities(self) -> list[TapCapabilities]:
-        """Get tap capabilites."""
 
 if __name__ == "__main__":
     Targetkafka.cli()

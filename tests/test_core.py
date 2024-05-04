@@ -89,11 +89,13 @@ class TestKafkaSink:
         assert isinstance(sink, kafkaSink)
 
     def test_sink_write_record(self, sink):
-        batch = [
-            {"name": "test", "age": 30},
-            {"name": "test2", "age": 40}
-        ]
-        future = sink.process_batch(batch)
+        context = {
+            "records": [
+                {"name": "test", "age": 30},
+                {"name": "test2", "age": 40}
+            ]
+        }
+        sink.process_batch(context)
 
     def test_sink_flush(self, sink):
         sink._producer.flush()
