@@ -127,6 +127,8 @@ docker-compose up -d
 meltano run tap-carbon-intensity target-kafka
 ```
 
+**Remarks**: warning message "Received state is invalid, incremental state has not been updated" may be found in the logging.  This warning message is due to single replicas running in local docker daemon and this is not the case when deploying muliplica replicas using Kubernetes stateful set. 
+
 ### SDK Dev Guide
 
 See the [dev guide](https://sdk.meltano.com/en/latest/dev_guide.html) for more instructions on how to use the Meltano Singer SDK to

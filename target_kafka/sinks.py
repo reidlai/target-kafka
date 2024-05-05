@@ -5,6 +5,9 @@ import json
 
 class kafkaSink(BatchSink):
     """kafka target sink class."""
+    
+    max_size = 10000000
+    
     def __init__(self, target, stream_name, schema, key_properties):
         
         super().__init__(target=target, stream_name=stream_name, schema=schema, key_properties=key_properties)
@@ -240,15 +243,7 @@ class kafkaSink(BatchSink):
         for record in records:
             value = json.dumps(record).encode('utf-8')
             future = self._producer.send(self.stream_name, value=value)
-            # future.add_callback(self.on_success)
-            # future.add_errback(self.on_error)
         self._producer.flush()
-
-    # def on_success(self, record_metadata):
-    #     print(record_metadata)
-        
-    # def on_error(self, exception):
-    #     print(exception)
         
     def close(self):
         self._producer.close()
