@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "target-kafka"
-version = "0.1.0"
+version = "0.1.1"
 description = "`target-kafka` is a Singer target for Kafka, built with the Meltano Singer SDK."
 readme = "README.md"
 authors = ["Reid LAI <reidlai@gmail.com>"]
