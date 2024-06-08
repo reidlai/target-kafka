@@ -6,27 +6,27 @@ environments:
 - name: test
 plugins:
   extractors:
-  - name: tap-csv
-    variant: meltanolabs
-    pip_url: git+https://github.com/MeltanoLabs/tap-csv.git
-    config: 
-      files:
-        - path: ./data.csv
-          entity: data
-          keys:
-            - symbol
-            - date
-            - open
-            - high
-            - low
-            - close
-            - adjclose
-            - volume
-            - EMA12
-            - EMA26
-            - RSI
-            - MACD
-          encoding: utf-8
+    - name: tap-csv
+      variant: meltanolabs
+      pip_url: git+https://github.com/MeltanoLabs/tap-csv.git
+      config: 
+        files:
+          - path: ./data.csv
+            entity: data
+            keys:
+              - symbol
+              - date
+              - open
+              - high
+              - low
+              - close
+              - adjclose
+              - volume
+              - EMA12
+              - EMA26
+              - RSI
+              - MACD
+            encoding: utf-8
   loaders:
   - name: target-kafka
     namespace: target_kafka

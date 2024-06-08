@@ -64,4 +64,4 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry.scripts]
 # CLI declaration
-target-kafka = 'target_kafka.target:TargetKafka.cli'
+target-kafka = 'target_kafka.target:Targetkafka.cli'

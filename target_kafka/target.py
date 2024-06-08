@@ -10,7 +10,7 @@ from target_kafka.sinks import (
     kafkaSink,
 )
 
-class TargetKafka(Target):
+class Targetkafka(Target):
     """Sample target for kafka."""
 
     name = "target-kafka"
